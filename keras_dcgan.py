@@ -15,17 +15,19 @@ import math
 def generator_model():
   model=sequential()
   model.add(Dense(input_dim=100,output_dim=1024))
-  model.add(Activation('tanh'))
+  model.add(Activation('relu'))
   model.add(Dense(128*7*7))
   model.add(BatchNormalization())
-  model.add(Activation('tanh'))
+  model.add(Activation('relu'))
   model.add(Reshape(7,7,128),input_shape=(128*7*7))
   model.add(UpSampling2D(size=(2,2)))
   model.add(Conv2D(64,(5,5),padding='same'))
-  model.add(Activation('tanh'))
+  model.add(Activation('relu'))
   model.add(UpSampling2D(size=(2,2)))
   model.add(Conv2D(1,(5,5),padding='same'))
-  model.add(Activation('tanh'))
+  model.add(Activation('tanh'))//最后一层要输出图像，而图像的像素值是有一个取值范围的，如0~255，relu的输出可能很大
+  //而tanh输出在-1~1之间，只要将tanh的输出加1乘以127.5就可以得到0~255之间的像素值
+  
   return model
 
 def discriminator_model():
